@@ -1,0 +1,19 @@
+.node {
+  width: 40px;
+  height: 40px;
+  outline: 1px solid black;
+  display: inline-block;
+}
+
+td {
+  height:30px;
+  width:30px;
+  border:1px solid;
+  text-align:center;
+}
+td:first-child {
+  border-left:solid;
+}
+td:nth-child(3n) {
+  border-right:solid ;
+}

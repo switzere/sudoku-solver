@@ -1,0 +1,14 @@
+.grid {
+  margin: 100px 0 0;
+}
+
+table {
+  margin:1em auto;
+}
+
+tr:first-child {
+  border-top:solid;
+}
+tr:nth-child(3n) td {
+  border-bottom:solid ;
+}
