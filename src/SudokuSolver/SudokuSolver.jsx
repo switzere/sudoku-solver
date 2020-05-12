@@ -3,6 +3,18 @@ import Node from './Node/Node';
 
 import './SudokuSolver.css';
 
+const DEFAULT = [
+  [5,3,0,0,7,0,0,0,0],
+  [6,0,0,1,9,5,0,0,0],
+  [0,9,8,0,0,0,0,6,0],
+  [8,0,0,0,6,0,0,0,3],
+  [4,0,0,8,0,3,0,0,1],
+  [7,0,0,0,2,0,0,0,6],
+  [0,6,0,0,0,0,2,8,0],
+  [0,0,0,4,1,9,0,0,5],
+  [0,0,0,0,8,0,0,7,9]
+];
+
 export default class SudokuSolver extends Component {
   constructor(props) {
     super(props);
@@ -48,8 +60,36 @@ export default class SudokuSolver extends Component {
       }
     }
 
+    //send grid to visualization function
+
     console.log(grid);
 
+  }
+
+  fillDefault() {
+    var table = document.getElementById('mainTable');
+
+    for(let row = 0; row < table.rows.length; row++){
+      for(let col = 0; col < table.rows[row].cells.length; col++){
+
+        var defaultVal = '';
+        if(DEFAULT[row][col] !== 0){
+          defaultVal = DEFAULT[row][col];
+        }
+
+        table.rows[row].cells[col].innerHTML = defaultVal;
+      }
+    }
+  }
+
+  clear() {
+    var table = document.getElementById('mainTable');
+
+    for(let row = 0; row < table.rows.length; row++){
+      for(let col = 0; col < table.rows[row].cells.length; col++){
+        table.rows[row].cells[col].innerHTML = '';
+      }
+    }
   }
 
   render() {
@@ -59,14 +99,20 @@ export default class SudokuSolver extends Component {
     return (
       <div  className="grid">
         <table id='mainTable'>
-          {nodes.map((row, rowIdx) => {
-            return <tr>
-              {row.map((node, nodeIdx) => <Node></Node>)}
-            </tr>
-          })}
-
+          <tbody>
+            {nodes.map((row, rowIdx) => {
+              console.log(rowIdx);
+              return (
+                <tr key={rowIdx}>
+                  {row.map((node, nodeIdx) => <Node key={nodeIdx}></Node>)}
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
         <button onClick={() => this.visualizeSudoku()}>Visualize</button>
+        <button onClick={() => this.fillDefault()}>Sample Puzzle</button>
+        <button onClick={() => this.clear()}>Clear Grid</button>
       </div>
 
     );
