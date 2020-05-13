@@ -17,3 +17,23 @@ td:first-child {
 td:nth-child(3n) {
   border-right:solid ;
 }
+
+.node-num{
+  background-color: #ADD8E6;
+}
+
+.node-visited{
+  background-color: #FFCCCB;
+}
+
+.node-selected{
+  background-color: yellow;
+}
+
+.node-good{
+  background-color: #90EE90;
+}
+
+.node-bad{
+  background-color: #FFCCCB;
+}

@@ -9,6 +9,18 @@ export default class Node extends Component {
   }
 
   render() {
-    return <td contentEditable="true"></td>;
+    const {val, row, col} = this.props;
+
+  /*  const extraClassName =
+      isNum ? 'node-num':
+      isVisited ? 'node-visited':
+      '' ;*/
+
+    return <td
+      contentEditable="true"
+      suppressContentEditableWarning={true}
+      //className={extraClassName}
+      id={`node-${row}-${col}`}
+      >{val}</td>;
   }
 }
