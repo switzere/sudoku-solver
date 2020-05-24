@@ -94,7 +94,11 @@ export default class SudokuSolver extends Component {
     var grid = this.getInputGrid();
 
     var actions = humanized(grid);
+
+    this.dA(actions);
   }
+
+
 
   getInputGrid() {
     var grid = [];
@@ -130,8 +134,8 @@ export default class SudokuSolver extends Component {
 
   displayActions(actions) {
 
-    var oldRow = -1;
-    var oldCol = -1;
+  //  var oldRow = -1;
+  //  var oldCol = -1;
 
     for(let i = 0; i < actions.length; i++){
       setTimeout(() => {
@@ -160,6 +164,14 @@ export default class SudokuSolver extends Component {
 
 
 
+  }
+
+  dA(actions) {
+    for(let i = 0; i < 9; i++) {
+      for(let j = 0; j < 9; j++) {
+        document.getElementById(`node-${i}-${j}`).innerHTML = actions[i][j].number;
+      }
+    }
   }
 
   visualizeSudoku() {
