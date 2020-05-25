@@ -91,11 +91,18 @@ export default class SudokuSolver extends Component {
   }
 
   h() {
+
+
     var grid = this.getInputGrid();
 
+    console.log(grid);
     var actions = humanized(grid);
+    console.log(actions);
+    console.log("LENGTH:"+actions.length);
 
-    this.dA(actions);
+    this.displayActions(actions);
+
+
   }
 
 
@@ -132,7 +139,13 @@ export default class SudokuSolver extends Component {
     return grid;
   }
 
+  getEl(i, actions) {
+    return document.getElementById(`node-${actions[i].row}-${actions[i].col}`);
+  }
+
   displayActions(actions) {
+
+    document.getElementById('humanized').disabled = true;
 
   //  var oldRow = -1;
   //  var oldCol = -1;
@@ -142,37 +155,89 @@ export default class SudokuSolver extends Component {
 
       //  console.log(actions[i]);
 
-        if(actions[i].action === "add") {
-          document.getElementById(`node-${actions[i].row}-${actions[i].col}`).className = 'node-good';
-          document.getElementById(`node-${actions[i].row}-${actions[i].col}`).innerHTML = actions[i].val;
+        switch(actions[i].action) {
+          case 'add':
+            this.getEl(i, actions).className = 'node-good';
+            this.getEl(i, actions).innerHTML = actions[i].val;
+            break;
+          case 'sub':
+            this.getEl(i, actions).className = 'node-bad';
+            break;
+          case 'onePos':
+            this.whiteGrid();
+            this.highlightCol(i, actions);
+            this.highlightRow(i, actions);
+            this.highlightSqr(i, actions);
+            this.getEl(i, actions).className = 'node-good';
+            this.getEl(i, actions).innerHTML = actions[i].val;
+            break;
+          case 'rOnly':
+            this.whiteGrid();
+            this.highlightCol(i, actions);
+            this.getEl(i, actions).className = 'node-good';
+            this.getEl(i, actions).innerHTML = actions[i].val;
+            break;
+          case 'cOnly':
+            this.whiteGrid();
+            this.highlightRow(i, actions);
+            this.getEl(i, actions).className = 'node-good';
+            this.getEl(i, actions).innerHTML = actions[i].val;
+            break;
+          case 'sOnly':
+            this.whiteGrid();
+            this.highlightSqr(i, actions);
+            this.getEl(i, actions).className = 'node-good';
+            this.getEl(i, actions).innerHTML = actions[i].val;
+            break;
         }
-        else {
-          document.getElementById(`node-${actions[i].row}-${actions[i].col}`).className = 'node-bad';
-        }
-        //document.getElementById(`node-${node.row}-${node.col}`).className = 'node-selected';
 
-        /*if(oldRow >= 0 && oldRow < 9 && oldCol >= 0 && oldCol < 9){
-          document.getElementById(`node-${oldRow}-${oldCol}`).className = '';
+        if(i === actions.length - 1){
+          document.getElementById('humanized').disabled = false;
+
         }
-        oldRow = actions[i].row;
-        oldCol = actions[i].col;*/
-      }, 100 * i)
+
+      }, 500 * i)
 
     }
 
 
 
-
-
   }
 
-  dA(actions) {
+  whiteGrid() {
     for(let i = 0; i < 9; i++) {
       for(let j = 0; j < 9; j++) {
-        document.getElementById(`node-${i}-${j}`).innerHTML = actions[i][j].number;
+        document.getElementById(`node-${i}-${j}`).className = '';
       }
     }
   }
+
+  highlightRow(n, actions) {
+    const rowNum = actions[n].row;
+    for(let j = 0; j < 9; j++) {
+      document.getElementById(`node-${rowNum}-${j}`).className = 'node-highlighted';
+    }
+  }
+
+  highlightCol(n, actions) {
+    const colNum = actions[n].col;
+    for(let i = 0; i < 9; i++) {
+      document.getElementById(`node-${i}-${colNum}`).className = 'node-highlighted';
+    }
+  }
+
+  highlightSqr(n, actions) {
+    const sqRow = Math.floor(actions[n].row/3)*3;
+    const sqCol = Math.floor(actions[n].col/3)*3;
+
+    for(let i = 0; i < 3; i++) {
+      for(let j = 0; j < 3; j++) {
+        document.getElementById(`node-${i+sqRow}-${j+sqCol}`).className = 'node-highlighted';
+      }
+    }
+  }
+
+
 
   visualizeSudoku() {
     var grid = [];
@@ -278,8 +343,8 @@ export default class SudokuSolver extends Component {
         <button onClick={() => this.visualizeSudoku()}>Solve!</button>
         <button onClick={() => this.fillDefault()}>Sample Puzzle</button>
         <button onClick={() => this.clear()}>Clear Grid</button>
-        <button onClick={() => this.b()}>Backtrack</button>
-        <button onClick={() => this.h()}>Humanized</button>
+        <button onClick={() => this.b()} id="backtrack">Backtrack</button>
+        <button onClick={() => this.h()} id="humanized">Humanized</button>
       </div>
 
     );

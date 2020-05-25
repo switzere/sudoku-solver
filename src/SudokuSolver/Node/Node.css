@@ -37,3 +37,7 @@ td:nth-child(3n) {
 .node-bad{
   background-color: #FFCCCB;
 }
+
+.node-highlighted {
+  background-color: #add8e6;
+}

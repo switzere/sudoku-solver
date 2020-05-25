@@ -3,7 +3,8 @@ var ret = [];
 //i is used for rows, j is used for columns, k is used for the range of numbers in a sudoku
 
 export function humanized(grid) {
-  return hInitialize(grid);
+  hInitialize(grid);
+  return ret;
 }
 
 //translated from my C algorithm, due for an update for javascript
@@ -46,20 +47,16 @@ function hSolve(puzzle) {
       for(let j = 0; j < 9; j++) {
 
         if(checkOnlyOption(puzzle[i][j]) > -1) {
-          console.log("Single option");
-          console.log("@ " +i +", "+j);
-          console.log(puzzle[i][j]);
-          console.log(puzzle[0][8]);
+          // console.log("Single option");
+          // console.log("@ " +i +", "+j);
+          // console.log(puzzle[i][j]);
+          // console.log(puzzle[0][8]);
           puzzle[i][j].number = checkOnlyOption(puzzle[i][j]);
+          ret.push(createMove(i,j,puzzle[i][j].number,'onePos'));
           puzzle = updateAround(puzzle, i, j);
         }
 
         puzzle = noOtherPosibilities(puzzle, i, j);//updateAround triggers in this function on its own as well
-
-        if(i===0&&j===7){
-
-          console.log(puzzle);
-        }
 
       }
     }
@@ -156,14 +153,15 @@ function noOtherPosibilities(puzzle, row, col) {
 
     if(count === 1 && puzzle[row][col].number === 0){
       puzzle[row][col].number = posibility;
+      ret.push(createMove(row,col,posibility,'rOnly'));
       puzzle[row][col].possibleNumbers = [];
-      console.log(puzzle[row][col].number);
+  //    console.log(puzzle[row][col].number);
       puzzle = updateAround(puzzle, row, col);
-      console.log("noOtherPosibilities(row)");
-      console.log("@ " +row +", "+col);
-      console.log(posibility);
-      console.log(puzzle[row][col].number);
-      console.log(puzzle);
+      // console.log("noOtherPosibilities(row)");
+      // console.log("@ " +row +", "+col);
+      // console.log(posibility);
+      // console.log(puzzle[row][col].number);
+      // console.log(puzzle);
       return puzzle;
     }
 
@@ -184,6 +182,7 @@ function noOtherPosibilities(puzzle, row, col) {
 
     if(count === 1 && puzzle[row][col].number === 0){
       puzzle[row][col].number = posibility;
+      ret.push(createMove(row,col,posibility,'cOnly'));
       puzzle[row][col].possibleNumbers = [];
       puzzle = updateAround(puzzle, row, col);
       //console.log("noOtherPosibilities(col)");
@@ -212,6 +211,7 @@ function noOtherPosibilities(puzzle, row, col) {
 
     if(count === 1 && puzzle[row][col].number === 0){
       puzzle[row][col].number = posibility;
+      ret.push(createMove(row,col,posibility,'sOnly'));
       puzzle[row][col].possibleNumbers = [];
       puzzle = updateAround(puzzle, row, col);
     //  console.log("noOtherPosibilities(sqr)");
@@ -328,6 +328,16 @@ function isComplete(puzzle) {
   }
 
   return true;
+}
+
+
+function createMove(i, j, n, action) {
+  return {
+    row: i,
+    col: j,
+    val: n,
+    action: action,
+  }
 }
 
 function Square(row, col, num) {
