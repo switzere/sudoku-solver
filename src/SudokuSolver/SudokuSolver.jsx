@@ -52,6 +52,8 @@ export default class SudokuSolver extends Component {
   fillDefault() {
     var table = document.getElementById('mainTable');
 
+    this.whiteGrid();
+
     for(let row = 0; row < table.rows.length; row++){
       for(let col = 0; col < table.rows[row].cells.length; col++){
 
@@ -79,7 +81,7 @@ export default class SudokuSolver extends Component {
 
 
 
-  b() {
+  backtrack() {
     var grid = this.getInputGrid();
 
     var actions = backtrack(grid);
@@ -90,7 +92,7 @@ export default class SudokuSolver extends Component {
 
   }
 
-  h() {
+  humanized() {
 
 
     var grid = this.getInputGrid();
@@ -145,7 +147,18 @@ export default class SudokuSolver extends Component {
 
   displayActions(actions) {
 
+    this.whiteGrid();
+
     document.getElementById('humanized').disabled = true;
+    document.getElementById('backtrack').disabled = true;
+    document.getElementById('clear').disabled = true;
+    document.getElementById('sample').disabled = true;
+
+    document.getElementById('humanized').className = 'offButton';
+    document.getElementById('backtrack').className = 'offButton';
+    document.getElementById('clear').className = 'offButton';
+    document.getElementById('sample').className = 'offButton';
+
 
   //  var oldRow = -1;
   //  var oldCol = -1;
@@ -193,12 +206,31 @@ export default class SudokuSolver extends Component {
 
         if(i === actions.length - 1){
           document.getElementById('humanized').disabled = false;
+          document.getElementById('backtrack').disabled = false;
+          document.getElementById('clear').disabled = false;
+          document.getElementById('sample').disabled = false;
 
+          document.getElementById('humanized').className = 'runButton';
+          document.getElementById('backtrack').className = 'runButton';
+          document.getElementById('clear').className = 'runButton';
+          document.getElementById('sample').className = 'runButton';
+
+          if( this.isFull() === 1 ) {
+            this.greenGrid();
+          }
+          else {
+            this.redGrid();
+          }
         }
 
       }, 500 * i)
 
     }
+
+
+    /*setTimeout(() => {
+      this.whiteGrid();
+    }, 500 * actions.length+20)*/
 
 
 
@@ -210,6 +242,38 @@ export default class SudokuSolver extends Component {
         document.getElementById(`node-${i}-${j}`).className = '';
       }
     }
+  }
+
+  greenGrid() {
+    for(let i = 0; i < 9; i++) {
+      for(let j = 0; j < 9; j++) {
+        document.getElementById(`node-${i}-${j}`).className = 'node-good';
+      }
+    }
+  }
+
+  redGrid() {
+    for(let i = 0; i < 9; i++) {
+      for(let j = 0; j < 9; j++) {
+        document.getElementById(`node-${i}-${j}`).className = 'node-bad';
+      }
+    }
+  }
+
+  isFull() {
+
+    var table = document.getElementById('mainTable');
+
+
+    for(let i = 0; i < 9; i++) {
+      for(let j = 0; j < 9; j++) {
+        if( table.rows[i].cells[j].innerHTML === '' ) {
+          return -1;
+        }
+      }
+    }
+
+    return 1;
   }
 
   highlightRow(n, actions) {
@@ -236,78 +300,6 @@ export default class SudokuSolver extends Component {
       }
     }
   }
-
-
-
-  visualizeSudoku() {
-    var grid = [];
-
-    console.log("pressed");
-
-    var table = document.getElementById('mainTable');
-    for(let row = 0; row < table.rows.length; row++){
-
-      grid[row] = [];
-
-      for(let col = 0; col < table.rows[row].cells.length; col++){
-
-        var input =  table.rows[row].cells[col].innerHTML;
-        input = input.charAt(0);
-
-        if( input === "1" || input === "2" || input === "3" || input === "4" || input === "5" || input === "6" || input === "7" || input === "8" || input === "9" ){
-          grid[row][col] = input;
-        }
-        else{
-          grid[row][col] = 0;
-        }
-
-        // if( grid[row][col] !== 0 ){
-        //   document.getElementById(`node-${row}-${col}`).className =
-        //     'node-visited';
-        // }
-
-      }
-    }
-
-    //send grid to visualization function
-    //backtrack(grid);
-
-
-    for( let row = 0; row < 9; row++ ){
-
-      var oldRow = -1;
-      var oldCol = -1;
-
-      setTimeout(() => {
-
-        for( let col = 0; col < 9; col++ ){
-
-          setTimeout(() => {
-
-            document.getElementById(`node-${row}-${col}`).className = 'node-selected';
-            //document.getElementById(`node-${node.row}-${node.col}`).className = 'node-selected';
-
-            if(oldRow >= 0 && oldRow < 9 && oldCol >= 0 && oldCol < 9){
-              document.getElementById(`node-${oldRow}-${oldCol}`).className = '';
-            }
-            oldRow = row;
-            oldCol = col;
-
-          }, 100 * col)
-
-
-        }
-
-      }, 1000 * row)
-
-
-    }
-
-    console.log(grid);
-
-  }
-
-
 
 
 
@@ -340,11 +332,11 @@ export default class SudokuSolver extends Component {
             })}
           </tbody>
         </table>
-        <button onClick={() => this.visualizeSudoku()}>Solve!</button>
-        <button onClick={() => this.fillDefault()}>Sample Puzzle</button>
-        <button onClick={() => this.clear()}>Clear Grid</button>
-        <button onClick={() => this.b()} id="backtrack">Backtrack</button>
-        <button onClick={() => this.h()} id="humanized">Humanized</button>
+        <button onClick={() => this.backtrack()} id="backtrack" className="runButton">Run Backtrack</button>
+        <button onClick={() => this.humanized()} id="humanized" className="runButton">Run Humanized</button>
+        <br></br>
+        <button onClick={() => this.fillDefault()} id="sample" className="runButton">Sample Puzzle</button>
+        <button onClick={() => this.clear()} id="clear" className="runButton">Clear Grid</button>
       </div>
 
     );

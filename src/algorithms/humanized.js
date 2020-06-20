@@ -3,6 +3,9 @@ var ret = [];
 //i is used for rows, j is used for columns, k is used for the range of numbers in a sudoku
 
 export function humanized(grid) {
+  ret = [0];
+  console.log("Grid recieved");
+  console.log(grid);
   hInitialize(grid);
   return ret;
 }
