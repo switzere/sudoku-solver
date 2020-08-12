@@ -202,6 +202,8 @@ export default class SudokuSolver extends Component {
             this.getEl(i, actions).className = 'node-good';
             this.getEl(i, actions).innerHTML = actions[i].val;
             break;
+          default:
+            this.whiteGrid();
         }
 
         if(i === actions.length - 1){

@@ -83,7 +83,22 @@
   padding: 3em;
 }
 
-.runButton,.offButton {
+@media screen and (max-width: 1000px) {
+  .sidebar {
+    display: none;
+  }
+  .container .root {
+    grid-column: 1 / span 4;
+  }
+  .container .sidebar {
+    grid-column: 0;
+  }
+  .navigation {
+    display: none;
+  }
+}
+
+.runButton, .offButton {
   color: black;
   padding: 16px 32px;
   width: 20%;
